@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f8f2">
+  <meta name="description" content="在本机转换文档、音视频、图片、3D、CAD 和地理数据。查询支持格式，下载 File Converter Skill。">
+  <title>File Converter — 文件换个格式，继续用。</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#formats">跳到格式目录</a>
+  <header class="header" data-focus="header">
+    <a class="brand" href="./" aria-label="File Converter 首页"><img src="./favicon.svg" width="30" height="30" alt=""><span>File Converter<span class="brand-dot">.</span></span></a>
+    <nav aria-label="主导航"><a href="#formats">格式目录</a><a href="#start">开始使用</a><a href="https://github.com/aytoast/file-converter" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main>
+    <section class="hero page-width" data-focus="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span> 本地运行的文件转换 Skill</div>
+        <h1>文件换个格式，<br><span>继续用。</span></h1>
+        <p class="hero-description">打不开的照片、需要编辑的 PDF、换软件的 3D 模型。<br class="desktop-break">把手里的文件，转成下一步需要的格式。</p>
+        <div class="hero-actions"><a class="button button-dark" href="./downloads/file-converter.zip" download>下载 Skill <span aria-hidden="true">↓</span></a><a class="text-link" href="#formats">先看看能怎么转 <span aria-hidden="true">↗</span></a></div>
+        <p class="hero-footnote">开发者预览版 v0.1.0 · 在本机执行，本站不接收文件</p>
+      </div>
+      <div class="route-board" aria-label="常用转换路线">
+        <div class="board-top"><span>换一种格式，多一种用法</span><span class="board-index">01 — 03</span></div>
+        <button class="quick-route" data-source="pdf" data-target="docx"><span class="file-icon file-pdf">PDF</span><span class="quick-description"><strong>把报告变成可编辑文档</strong><span>PDF <i aria-hidden="true">→</i> DOCX</span></span><span class="route-arrow" aria-hidden="true">↗</span></button>
+        <button class="quick-route" data-source="heic" data-target="jpg"><span class="file-icon file-image">HEIC</span><span class="quick-description"><strong>让手机照片更好分享</strong><span>HEIC <i aria-hidden="true">→</i> JPG</span></span><span class="route-arrow" aria-hidden="true">↗</span></button>
+        <button class="quick-route" data-source="glb" data-target="fbx"><span class="file-icon file-model">GLB</span><span class="quick-description"><strong>带着模型换个创作工具</strong><span>GLB <i aria-hidden="true">→</i> FBX</span></span><span class="route-arrow" aria-hidden="true">↗</span></button>
+        <div class="board-bottom"><span class="tiny-dot" aria-hidden="true"></span>原件保留，结果另存</div>
+      </div>
+    </section>
+    <section class="catalog page-width" id="formats" data-focus="catalog">
+      <div class="section-top"><div><span class="section-number">01 / 格式目录</span><h2>这个文件，能转成什么？</h2></div><p>选择源格式，查看目标、依赖和转换边界。</p></div>
+      <div class="catalog-shell">
+        <aside class="source-pane" aria-label="选择源格式">
+          <label class="search-label" for="format-search">查找源格式</label>
+          <div class="search-box"><span aria-hidden="true">⌕</span><input id="format-search" type="search" placeholder="PDF、HEIC、3D…" autocomplete="off"><kbd aria-hidden="true">/</kbd></div>
+          <div id="source-list" class="source-list" role="group" aria-label="源格式列表"><p class="loading">正在读取格式目录…</p></div>
+          <p id="source-count" class="source-count" aria-live="polite"></p>
+        </aside>
+        <div class="target-pane">
+          <div class="selected-source"><div><span class="small-label">源文件</span><h3 id="source-title">PDF 文档</h3><p id="source-description"></p></div><span id="source-extension" class="extension-mark">.pdf</span></div>
+          <div class="target-heading"><span>可以转换为</span><span id="target-count"></span></div>
+          <div id="target-list" class="target-list" aria-live="polite"></div>
+          <div id="route-detail" class="route-detail" hidden>
+            <div class="detail-top"><strong id="detail-title"></strong><button id="close-detail" class="icon-button" aria-label="关闭转换详情">×</button></div>
+            <p id="detail-note"></p><p class="dependency"><span>本地依赖</span><strong id="detail-dependency"></strong></p>
+            <div class="command-line"><code id="command-text"></code><button id="copy-command" aria-label="复制转换命令">复制</button></div>
+            <span id="copy-status" class="copy-status" role="status"></span>
+          </div>
+          <p class="catalog-note">这里查询转换路线，不执行转换。实际可用目标由本机引擎和文件内容决定。</p>
+        </div>
+      </div>
+      <noscript><p>格式目录需要 JavaScript。你也可以在 <a href="https://github.com/aytoast/file-converter/blob/main/references/conversion-catalog.md">GitHub 查看完整转换说明</a>。</p></noscript>
+    </section>
+    <section class="start page-width" id="start" data-focus="start">
+      <div class="section-top"><div><span class="section-number">02 / 开始使用</span><h2>下载到电脑，然后在本机运行。</h2></div><a class="text-link" href="https://github.com/aytoast/file-converter#快速开始">完整使用说明 <span aria-hidden="true">↗</span></a></div>
+      <div class="steps"><article><span class="step-number">1</span><h3>下载 Skill 包</h3><p>包含操作说明、转换脚本和测试。解压后交给支持本地脚本的 Agent 使用。</p><a href="./downloads/file-converter.zip" download>下载 ZIP <span aria-hidden="true">↓</span></a></article><article><span class="step-number">2</span><h3>准备需要的引擎</h3><p>基础转换使用 Python。Office、Blender 和语音模型按任务配置，无需一次装齐。</p><a href="https://github.com/aytoast/file-converter/blob/main/references/usage.md">查看依赖说明 <span aria-hidden="true">↗</span></a></article><article><span class="step-number">3</span><h3>指定文件和目标</h3><p>先查询可用格式，再运行转换。原件保留，新文件默认存回原目录。</p><a href="https://github.com/aytoast/file-converter/blob/main/SKILL.md">查看 Skill 指令 <span aria-hidden="true">↗</span></a></article></div>
+    </section>
+    <section class="project-status page-width" data-focus="status">
+      <div class="evidence"><span class="evidence-number">43<span>项</span></span><div><h3>本地测试通过</h3><p>包含真实 Office、Blender、OCR、英文语音识别和地理数据样本。</p><a href="https://github.com/aytoast/file-converter/blob/main/references/verification.md">查看验证记录 <span aria-hidden="true">↗</span></a></div></div>
+      <div class="boundaries"><h3>当前边界</h3><p>这是本地 Skill 预览包，尚无一键安装程序。天禧技能市场与 Windows 右键菜单待接入。</p><p>复杂 PDF 版面需要复核；DWG 需 ODA，引擎缺失，尚未实测。语音识别需另配本地模型。</p></div>
+    </section>
+    <section class="closing page-width" data-focus="closing"><div><h2>让格式兼容这件事，<br>少占一点时间。</h2><p>代码、支持范围与验证记录都在 GitHub。</p></div><a class="button button-dark" href="https://github.com/aytoast/file-converter">查看源代码 <span aria-hidden="true">↗</span></a></section>
+  </main>
+  <footer class="footer page-width" data-focus="footer"><a class="brand" href="./">File Converter<span class="brand-dot">.</span></a><span>本机转换 · 原件保留</span><a href="https://github.com/aytoast/file-converter/blob/main/LICENSE">MIT License <span aria-hidden="true">↗</span></a></footer>
+</body>
+</html>

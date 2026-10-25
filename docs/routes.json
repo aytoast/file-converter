@@ -1,0 +1,1087 @@
+{
+  "version": "0.1.0",
+  "verified_date": "2026-10-25",
+  "tests_passed": 43,
+  "sources": [
+    {
+      "id": "pdf",
+      "label": "PDF 文档",
+      "extension": "PDF",
+      "sample": "report.pdf",
+      "description": "文本 PDF 可重建为可编辑文档，或提取其中的表格与图片。",
+      "routes": [
+        {
+          "target": "docx",
+          "label": "Word 文档",
+          "dependency": "PyMuPDF / pdf2docx",
+          "note": "重建段落和版面。复杂表格、分栏与字体可能变化，需要复核。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "xlsx",
+          "label": "Excel 表格",
+          "dependency": "PyMuPDF / openpyxl",
+          "note": "提取可检测的文字表格；没有表格时明确报告失败。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "png",
+          "label": "逐页 PNG 图片",
+          "dependency": "PyMuPDF",
+          "note": "渲染所有页面，可通过 --pages 选择页码。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "md",
+          "label": "Markdown 文字",
+          "dependency": "PyMuPDF",
+          "note": "提取阅读顺序文字，不自动恢复全部标题与版式。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "images",
+          "label": "提取嵌入图片",
+          "dependency": "PyMuPDF",
+          "note": "提取 PDF 内的原图资源，与整页截图不同。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "pptx",
+          "label": "图片型 PowerPoint",
+          "dependency": "PyMuPDF / python-pptx",
+          "note": "每页封装为图片。输出文字和图形不能直接编辑。",
+          "flags": "--allow-layout-loss",
+          "status": "ready"
+        }
+      ],
+      "aliases": ""
+    },
+    {
+      "id": "scan",
+      "label": "扫描 PDF",
+      "extension": "SCAN",
+      "sample": "scan.pdf",
+      "description": "先进行本地 OCR，再生成文字或叠加可搜索文字层。",
+      "routes": [
+        {
+          "target": "docx",
+          "label": "Word 识别文字",
+          "dependency": "RapidOCR / python-docx",
+          "note": "输出可编辑识别文字，未恢复原始完整排版。",
+          "flags": "--ocr",
+          "status": "ready"
+        },
+        {
+          "target": "pdf",
+          "label": "可搜索 PDF",
+          "dependency": "RapidOCR / PyMuPDF",
+          "note": "保留原页面外观并叠加隐藏文字。识别内容仍需校对。",
+          "flags": "--ocr",
+          "status": "ready"
+        },
+        {
+          "target": "xlsx",
+          "label": "Excel 识别表格",
+          "dependency": "RapidOCR / openpyxl",
+          "note": "从文字框位置推断行列，不恢复合并单元格。",
+          "flags": "--ocr",
+          "status": "ready"
+        },
+        {
+          "target": "txt",
+          "label": "纯文字",
+          "dependency": "RapidOCR",
+          "note": "本地识别印刷文字，复杂版面与手写内容需要额外验收。",
+          "flags": "--ocr",
+          "status": "ready"
+        }
+      ],
+      "aliases": "ocr 扫描件"
+    },
+    {
+      "id": "docx",
+      "label": "Word 文档",
+      "extension": "DOCX",
+      "sample": "report.docx",
+      "description": "原生排版导出与内容提取分别处理，原件保持不变。",
+      "routes": [
+        {
+          "target": "pdf",
+          "label": "PDF 文档",
+          "dependency": "Word 或 LibreOffice",
+          "note": "使用真实办公引擎导出，复杂对象和字体需要复核。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "odt",
+          "label": "OpenDocument 文档",
+          "dependency": "Word 或 LibreOffice",
+          "note": "转换为 ODT；目标不支持的特性可能变化。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "png",
+          "label": "逐页 PNG 图片",
+          "dependency": "办公引擎 / PyMuPDF",
+          "note": "先导出 PDF 再渲染，保留页面视觉布局。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "md",
+          "label": "Markdown 文字",
+          "dependency": "python-docx",
+          "note": "提取正文和表格文字；图片、脚注与复杂结构不保留。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "images",
+          "label": "提取嵌入图片",
+          "dependency": "Python / Pillow",
+          "note": "提取文档内可读取的图片资源。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "doc odt rtf"
+    },
+    {
+      "id": "pptx",
+      "label": "PowerPoint 演示",
+      "extension": "PPTX",
+      "sample": "slides.pptx",
+      "description": "导出幻灯片页面或提取嵌入图片，编辑能力取决于输出格式。",
+      "aliases": "ppt odp 演示 幻灯片",
+      "routes": [
+        {
+          "target": "pdf",
+          "label": "PDF 文档",
+          "dependency": "PowerPoint 或 LibreOffice",
+          "note": "按幻灯片页面导出，需要复核字体、裁剪与复杂对象。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "odp",
+          "label": "OpenDocument 演示",
+          "dependency": "PowerPoint 或 LibreOffice",
+          "note": "转换演示文稿容器，动画与复杂对象可能变化。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "png",
+          "label": "逐页 PNG 图片",
+          "dependency": "办公引擎 / PyMuPDF",
+          "note": "渲染为图片，结果不能直接编辑幻灯片元素。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "images",
+          "label": "提取嵌入图片",
+          "dependency": "Python / Pillow",
+          "note": "提取演示文件内的图片资源，不是整页截图。",
+          "flags": "",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "id": "csv",
+      "label": "CSV 表格",
+      "extension": "CSV",
+      "sample": "table.csv",
+      "description": "保护前导零、长编号和文字字段，编码与分隔符可指定。",
+      "routes": [
+        {
+          "target": "xlsx",
+          "label": "Excel 工作簿",
+          "dependency": "openpyxl",
+          "note": "按数据写入，保护前导零和长编号，不自动执行等号开头的文字。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "ods",
+          "label": "OpenDocument 表格",
+          "dependency": "odfpy",
+          "note": "数据交换路线，不保留原本不存在的样式或公式关系。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "json",
+          "label": "JSON 数据",
+          "dependency": "Python",
+          "note": "需要唯一非空表头；每行转换为一个对象。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "tsv",
+          "label": "TSV 表格",
+          "dependency": "Python",
+          "note": "使用制表符分隔，可指定输出编码。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "geojson",
+          "label": "GeoJSON 坐标点",
+          "dependency": "GeoPandas / GDAL",
+          "note": "需要明确经纬度列与源坐标系，不能猜测。",
+          "flags": "--x-column lon --y-column lat --source-crs EPSG:4326",
+          "status": "ready"
+        }
+      ],
+      "aliases": "tsv"
+    },
+    {
+      "id": "xlsx",
+      "label": "Excel 工作簿",
+      "extension": "XLSX",
+      "sample": "workbook.xlsx",
+      "description": "多个工作表、公式与原生排版需要明确处理。",
+      "routes": [
+        {
+          "target": "csv",
+          "label": "CSV 数据",
+          "dependency": "openpyxl",
+          "note": "明确选择工作表。公式可选择缓存结果或表达式。",
+          "flags": "--sheet \"Sheet1\"",
+          "status": "ready"
+        },
+        {
+          "target": "ods",
+          "label": "OpenDocument 工作簿",
+          "dependency": "Excel 或 LibreOffice",
+          "note": "通过办公引擎转换，尽量保留工作簿结构。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "pdf",
+          "label": "PDF 文档",
+          "dependency": "Excel 或 LibreOffice",
+          "note": "按工作簿打印设置导出，需要检查分页与打印区域。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "json",
+          "label": "JSON 数据",
+          "dependency": "openpyxl",
+          "note": "按工作表导出行数据，需要唯一非空表头。",
+          "flags": "--sheet \"Sheet1\"",
+          "status": "ready"
+        }
+      ],
+      "aliases": "xls ods 表格"
+    },
+    {
+      "id": "image",
+      "label": "普通图片",
+      "extension": "PNG",
+      "sample": "photo.png",
+      "description": "静态图片互转，也可识别文字、表格或描摹轮廓。",
+      "routes": [
+        {
+          "target": "jpg",
+          "label": "JPEG 图片",
+          "dependency": "Pillow",
+          "note": "透明图需要选择背景；转换可能改变压缩质量和元数据。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "png",
+          "label": "PNG 图片",
+          "dependency": "Pillow",
+          "note": "支持透明度。保持视觉尺寸，EXIF 方向应用后另存。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "webp",
+          "label": "WebP 图片",
+          "dependency": "Pillow / WebP",
+          "note": "需要本机 WebP 编解码器，适合较小的图片文件。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "pdf",
+          "label": "PDF 文档",
+          "dependency": "Pillow",
+          "note": "每张图片转一页。多张合并需要明确顺序并使用 --merge。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "ico",
+          "label": "Windows 图标",
+          "dependency": "Pillow",
+          "note": "生成图标尺寸；不是修改扩展名。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "docx",
+          "label": "Word 识别文字",
+          "dependency": "RapidOCR / python-docx",
+          "note": "本地 OCR，输出可编辑文字；未恢复原始完整排版。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "xlsx",
+          "label": "Excel 识别表格",
+          "dependency": "RapidOCR / openpyxl",
+          "note": "根据文字位置推断行列，需要核对数字与列对应。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "svg",
+          "label": "SVG 单色路径",
+          "dependency": "OpenCV",
+          "note": "轮廓描摹会丢失颜色和纹理；不能还原为照片级矢量。",
+          "flags": "--allow-layout-loss",
+          "status": "ready"
+        }
+      ],
+      "aliases": "jpg jpeg webp bmp tiff avif 照片 截图"
+    },
+    {
+      "id": "heic",
+      "label": "手机照片",
+      "extension": "HEIC",
+      "sample": "photo.heic",
+      "description": "读取 HEIC/HEIF 后导出更常见的图片格式。",
+      "routes": [
+        {
+          "target": "jpg",
+          "label": "JPEG 图片",
+          "dependency": "Pillow / pillow-heif",
+          "note": "透明图需要选择背景；转换可能改变压缩质量和元数据。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "png",
+          "label": "PNG 图片",
+          "dependency": "Pillow / pillow-heif",
+          "note": "支持透明度。保持视觉尺寸，EXIF 方向应用后另存。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "webp",
+          "label": "WebP 图片",
+          "dependency": "Pillow / pillow-heif",
+          "note": "需要本机 WebP 编解码器，适合较小的图片文件。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "pdf",
+          "label": "PDF 文档",
+          "dependency": "Pillow / pillow-heif",
+          "note": "每张图片转一页。多张合并需要明确顺序并使用 --merge。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "heif 苹果手机"
+    },
+    {
+      "id": "gif",
+      "label": "动画图片",
+      "extension": "GIF",
+      "sample": "animation.gif",
+      "description": "多帧与时长单独处理，避免只导出第一帧。",
+      "routes": [
+        {
+          "target": "webp",
+          "label": "WebP 动图",
+          "dependency": "Pillow / WebP",
+          "note": "保留全部帧并核对帧数，循环和时长需要检查。",
+          "flags": "--all-frames",
+          "status": "ready"
+        },
+        {
+          "target": "png",
+          "label": "APNG 动图",
+          "dependency": "Pillow",
+          "note": "以多帧 PNG 输出。静态查看器可能只展示首帧。",
+          "flags": "--all-frames",
+          "status": "ready"
+        },
+        {
+          "target": "mp4",
+          "label": "MP4 视频",
+          "dependency": "Pillow / FFmpeg",
+          "note": "根据原帧时长生成无音频视频；透明度需要选择背景。",
+          "flags": "--background white",
+          "status": "ready"
+        }
+      ],
+      "aliases": "apng 动图"
+    },
+    {
+      "id": "svg",
+      "label": "SVG 矢量图片",
+      "extension": "SVG",
+      "sample": "drawing.svg",
+      "description": "将矢量页面渲染为位图或 PDF。外部资源不会自动下载。",
+      "aliases": "矢量 vector",
+      "routes": [
+        {
+          "target": "png",
+          "label": "PNG 图片",
+          "dependency": "PyMuPDF",
+          "note": "渲染到像素图片，缩放能力随输出分辨率变化。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "pdf",
+          "label": "PDF 文档",
+          "dependency": "PyMuPDF",
+          "note": "封装为 PDF 页面，需要复核 SVG 特性支持。",
+          "flags": "",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "id": "mp4",
+      "label": "视频文件",
+      "extension": "MP4",
+      "sample": "video.mp4",
+      "description": "转码、提取音轨、抽帧与语音识别使用不同路线。",
+      "routes": [
+        {
+          "target": "webm",
+          "label": "WebM 视频",
+          "dependency": "FFmpeg / VP9 / Opus",
+          "note": "默认保留第一条相关音视频轨，额外轨道与元数据不保留。",
+          "flags": "--allow-media-loss",
+          "status": "ready"
+        },
+        {
+          "target": "mkv",
+          "label": "MKV 视频",
+          "dependency": "FFmpeg",
+          "note": "本路线使用 H.264/AAC 重新编码，不能承诺无损。",
+          "flags": "--allow-media-loss",
+          "status": "ready"
+        },
+        {
+          "target": "mp3",
+          "label": "MP3 音频",
+          "dependency": "FFmpeg / LAME",
+          "note": "保留第一条音轨；额外音轨和元数据不保留。",
+          "flags": "--allow-media-loss",
+          "status": "ready"
+        },
+        {
+          "target": "wav",
+          "label": "WAV 音频",
+          "dependency": "FFmpeg",
+          "note": "有损文件转 WAV 不会恢复已经丢失的音质。",
+          "flags": "--allow-media-loss",
+          "status": "ready"
+        },
+        {
+          "target": "flac",
+          "label": "FLAC 音频",
+          "dependency": "FFmpeg",
+          "note": "无损编码不会恢复源文件此前已经丢失的信息。",
+          "flags": "--allow-media-loss",
+          "status": "ready"
+        },
+        {
+          "target": "gif",
+          "label": "片段 GIF",
+          "dependency": "FFmpeg",
+          "note": "指定时段与帧率；GIF 无音频，默认宽 480 像素。",
+          "flags": "--start 0 --duration 3 --fps 10",
+          "status": "ready"
+        },
+        {
+          "target": "frames",
+          "label": "PNG 图片序列",
+          "dependency": "FFmpeg",
+          "note": "按指定时段与帧率抽帧，返回所有图片。",
+          "flags": "--start 0 --duration 3 --fps 5",
+          "status": "ready"
+        },
+        {
+          "target": "srt",
+          "label": "SRT 识别字幕",
+          "dependency": "faster-whisper / 本地模型",
+          "note": "本地语音识别，需核对专名和时间。中文需要多语言模型。",
+          "flags": "--asr-model-path \"C:/models/whisper\" --language zh",
+          "status": "ready"
+        },
+        {
+          "target": "docx",
+          "label": "Word 识别文字",
+          "dependency": "faster-whisper / 本地模型",
+          "note": "识别音频中的讲话；不包含说话人分离或翻译。",
+          "flags": "--asr-model-path \"C:/models/whisper\" --language zh",
+          "status": "ready"
+        }
+      ],
+      "aliases": "mov mkv webm avi wmv flv ts mpeg"
+    },
+    {
+      "id": "mp3",
+      "label": "音频文件",
+      "extension": "MP3",
+      "sample": "recording.mp3",
+      "description": "常见音频转码，也支持本地识别文字与字幕。",
+      "routes": [
+        {
+          "target": "mp3",
+          "label": "MP3 音频",
+          "dependency": "FFmpeg / LAME",
+          "note": "保留第一条音轨；额外音轨和元数据不保留。",
+          "flags": "--allow-media-loss",
+          "status": "ready"
+        },
+        {
+          "target": "wav",
+          "label": "WAV 音频",
+          "dependency": "FFmpeg",
+          "note": "有损文件转 WAV 不会恢复已经丢失的音质。",
+          "flags": "--allow-media-loss",
+          "status": "ready"
+        },
+        {
+          "target": "flac",
+          "label": "FLAC 音频",
+          "dependency": "FFmpeg",
+          "note": "无损编码不会恢复源文件此前已经丢失的信息。",
+          "flags": "--allow-media-loss",
+          "status": "ready"
+        },
+        {
+          "target": "m4a",
+          "label": "M4A 音频",
+          "dependency": "FFmpeg / AAC",
+          "note": "本路线使用 AAC 编码；M4A 是容器，不代表一定无损。",
+          "flags": "--allow-media-loss",
+          "status": "ready"
+        },
+        {
+          "target": "srt",
+          "label": "SRT 识别字幕",
+          "dependency": "faster-whisper / 本地模型",
+          "note": "本地语音识别，需核对专名和时间。中文需要多语言模型。",
+          "flags": "--asr-model-path \"C:/models/whisper\" --language zh",
+          "status": "ready"
+        },
+        {
+          "target": "docx",
+          "label": "Word 识别文字",
+          "dependency": "faster-whisper / 本地模型",
+          "note": "识别音频中的讲话；不包含说话人分离或翻译。",
+          "flags": "--asr-model-path \"C:/models/whisper\" --language zh",
+          "status": "ready"
+        }
+      ],
+      "aliases": "wav flac aac m4a ogg opus aiff wma 音频 录音"
+    },
+    {
+      "id": "glb",
+      "label": "3D 模型",
+      "extension": "GLB",
+      "sample": "scene.glb",
+      "description": "独立 Blender 后台处理，不连接当前打开的场景。",
+      "routes": [
+        {
+          "target": "fbx",
+          "label": "FBX 模型",
+          "dependency": "Blender",
+          "note": "在独立后台场景导出并重新导入检查。材质与动画特性需要专项复核。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "glb",
+          "label": "GLB 模型",
+          "dependency": "Blender / trimesh",
+          "note": "适合封装模型和资源。备用网格路线会扁平化场景。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "gltf",
+          "label": "glTF 模型",
+          "dependency": "Blender",
+          "note": "导出资源内嵌到数据 URI，避免遗漏缓冲和图片。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "obj",
+          "label": "OBJ 网格",
+          "dependency": "Blender",
+          "note": "几何输出不保留完整材质、骨骼与动画，需明确接受损失。",
+          "flags": "--allow-layout-loss",
+          "status": "ready"
+        },
+        {
+          "target": "stl",
+          "label": "STL 网格",
+          "dependency": "Blender / trimesh",
+          "note": "主要保留几何，不能承载完整场景、材质和骨骼。",
+          "flags": "--allow-layout-loss",
+          "status": "ready"
+        },
+        {
+          "target": "ply",
+          "label": "PLY 网格",
+          "dependency": "Blender / trimesh",
+          "note": "网格输出。检查坐标、颜色和法线等目标可承载属性。",
+          "flags": "--allow-layout-loss",
+          "status": "ready"
+        },
+        {
+          "target": "png",
+          "label": "模型预览图",
+          "dependency": "Blender",
+          "note": "在独立后台进程使用 CPU 渲染，不修改当前打开的场景。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "gltf 3d 模型 stl obj ply blend"
+    },
+    {
+      "id": "fbx",
+      "label": "FBX 场景",
+      "extension": "FBX",
+      "sample": "scene.fbx",
+      "description": "导入场景后导出模型；特有材质、动画与插件效果需要复核。",
+      "routes": [
+        {
+          "target": "glb",
+          "label": "GLB 模型",
+          "dependency": "Blender / trimesh",
+          "note": "适合封装模型和资源。备用网格路线会扁平化场景。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "gltf",
+          "label": "glTF 模型",
+          "dependency": "Blender",
+          "note": "导出资源内嵌到数据 URI，避免遗漏缓冲和图片。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "obj",
+          "label": "OBJ 网格",
+          "dependency": "Blender",
+          "note": "几何输出不保留完整材质、骨骼与动画，需明确接受损失。",
+          "flags": "--allow-layout-loss",
+          "status": "ready"
+        },
+        {
+          "target": "stl",
+          "label": "STL 网格",
+          "dependency": "Blender / trimesh",
+          "note": "主要保留几何，不能承载完整场景、材质和骨骼。",
+          "flags": "--allow-layout-loss",
+          "status": "ready"
+        },
+        {
+          "target": "ply",
+          "label": "PLY 网格",
+          "dependency": "Blender / trimesh",
+          "note": "网格输出。检查坐标、颜色和法线等目标可承载属性。",
+          "flags": "--allow-layout-loss",
+          "status": "ready"
+        },
+        {
+          "target": "png",
+          "label": "模型预览图",
+          "dependency": "Blender",
+          "note": "在独立后台进程使用 CPU 渲染，不修改当前打开的场景。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "三维 动画 骨骼"
+    },
+    {
+      "id": "dxf",
+      "label": "CAD 图纸",
+      "extension": "DXF",
+      "sample": "drawing.dxf",
+      "description": "DXF 审计与二维渲染；专业对象和外部参照需要检查。",
+      "routes": [
+        {
+          "target": "pdf",
+          "label": "PDF 图纸",
+          "dependency": "ezdxf / matplotlib",
+          "note": "二维顶视渲染，不能替代原生 CAD 对专业对象的显示。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "svg",
+          "label": "SVG 图纸",
+          "dependency": "ezdxf / matplotlib",
+          "note": "导出可缩放的二维图形，字体与复杂对象可能变化。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "png",
+          "label": "PNG 图纸",
+          "dependency": "ezdxf / matplotlib",
+          "note": "渲染选中布局，默认 Model。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "dwg",
+          "label": "DWG 图纸",
+          "dependency": "ODA File Converter",
+          "note": "适配路径已写，本机无 ODA，尚未实测此路线。",
+          "flags": "",
+          "status": "unverified"
+        }
+      ],
+      "aliases": "cad 工程图"
+    },
+    {
+      "id": "geojson",
+      "label": "地理数据",
+      "extension": "GEOJSON",
+      "sample": "places.geojson",
+      "description": "坐标系需已知，多图层需选择；Shapefile 要打包配套文件。",
+      "routes": [
+        {
+          "target": "gpkg",
+          "label": "GeoPackage",
+          "dependency": "GeoPandas / GDAL",
+          "note": "保留并验证坐标系；多个源图层需明确选择。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "geojson",
+          "label": "GeoJSON",
+          "dependency": "GeoPandas / GDAL",
+          "note": "导出到 WGS84；这是实际坐标重投影，不是修改坐标标签。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "shp.zip",
+          "label": "Shapefile ZIP",
+          "dependency": "GeoPandas / GDAL",
+          "note": "打包 SHP、DBF、PRJ 等配套文件。无法保留的长字段会拒绝。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "kml",
+          "label": "KML 地理数据",
+          "dependency": "GeoPandas / GDAL",
+          "note": "WGS84 输出。目标格式丢失字段时，需要明确选择。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "csv",
+          "label": "CSV 属性表",
+          "dependency": "GeoPandas / GDAL",
+          "note": "几何作为 WKT 字段输出；结果会注明恢复所需的坐标系。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "gis geojson 地图 地理 坐标"
+    },
+    {
+      "id": "gpkg",
+      "label": "GeoPackage",
+      "extension": "GPKG",
+      "sample": "map.gpkg",
+      "description": "多图层文件请用 --layer 指定图层，避免遗漏数据。",
+      "routes": [
+        {
+          "target": "geojson",
+          "label": "GeoJSON",
+          "dependency": "GeoPandas / GDAL",
+          "note": "导出到 WGS84；这是实际坐标重投影，不是修改坐标标签。",
+          "flags": "--layer places",
+          "status": "ready"
+        },
+        {
+          "target": "shp.zip",
+          "label": "Shapefile ZIP",
+          "dependency": "GeoPandas / GDAL",
+          "note": "打包 SHP、DBF、PRJ 等配套文件。无法保留的长字段会拒绝。",
+          "flags": "--layer places",
+          "status": "ready"
+        },
+        {
+          "target": "kml",
+          "label": "KML 地理数据",
+          "dependency": "GeoPandas / GDAL",
+          "note": "WGS84 输出。目标格式丢失字段时，需要明确选择。",
+          "flags": "--layer places",
+          "status": "ready"
+        },
+        {
+          "target": "csv",
+          "label": "CSV 属性表",
+          "dependency": "GeoPandas / GDAL",
+          "note": "几何作为 WKT 字段输出；结果会注明恢复所需的坐标系。",
+          "flags": "--layer places",
+          "status": "ready"
+        }
+      ],
+      "aliases": "geopackage 图层"
+    },
+    {
+      "id": "ttf",
+      "label": "字体文件",
+      "extension": "TTF",
+      "sample": "font.ttf",
+      "description": "转换字体容器，保留对应轮廓类型，不改变字体授权。",
+      "routes": [
+        {
+          "target": "woff2",
+          "label": "WOFF2 字体",
+          "dependency": "FontTools / Brotli",
+          "note": "压缩字体容器，检查字形顺序。字体许可保持不变。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "woff",
+          "label": "WOFF 字体",
+          "dependency": "FontTools",
+          "note": "转换 Web 字体容器，不进行 TTF/OTF 轮廓重建。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "字体 font"
+    },
+    {
+      "id": "ttc",
+      "label": "字体集合",
+      "extension": "TTC",
+      "sample": "fonts.ttc",
+      "description": "先按索引选择字体，再导出对应容器。",
+      "routes": [
+        {
+          "target": "woff2",
+          "label": "WOFF2 字体",
+          "dependency": "FontTools / Brotli",
+          "note": "导出集合中索引为 0 的字体；按需要调整索引。",
+          "flags": "--font-index 0",
+          "status": "ready"
+        },
+        {
+          "target": "ttf",
+          "label": "TTF 字体",
+          "dependency": "FontTools",
+          "note": "仅适用于集合内对应的 TrueType 轮廓，类型不匹配时拒绝。",
+          "flags": "--font-index 0",
+          "status": "ready"
+        }
+      ],
+      "aliases": "otc 字体集合"
+    },
+    {
+      "id": "epub",
+      "label": "电子书",
+      "extension": "EPUB",
+      "sample": "book.epub",
+      "description": "流式内容转换；转换到固定页面时会重新分页。",
+      "routes": [
+        {
+          "target": "pdf",
+          "label": "PDF 文档",
+          "dependency": "PyMuPDF",
+          "note": "将流式电子书排成页面，分页与阅读器可能不同。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "docx",
+          "label": "Word 文档",
+          "dependency": "Pandoc",
+          "note": "转换内容结构，不保证复现阅读器样式。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "html",
+          "label": "HTML 文档",
+          "dependency": "Pandoc",
+          "note": "语义内容导出，外部资源受到沙箱限制。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "电子书 ebook"
+    },
+    {
+      "id": "srt",
+      "label": "字幕文件",
+      "extension": "SRT",
+      "sample": "captions.srt",
+      "description": "校验字幕事件数量；目标格式的样式能力不同。",
+      "routes": [
+        {
+          "target": "vtt",
+          "label": "WebVTT 字幕",
+          "dependency": "pysubs2",
+          "note": "保留文字与时间，目标不支持的样式会减少。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "ass",
+          "label": "ASS 字幕",
+          "dependency": "pysubs2",
+          "note": "写入 ASS 容器，不会自动增加原本没有的特效。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "vtt ass ssa 字幕"
+    },
+    {
+      "id": "zip",
+      "label": "压缩包",
+      "extension": "ZIP",
+      "sample": "archive.zip",
+      "description": "解包后重新压缩，校验文件与归档完整性。",
+      "routes": [
+        {
+          "target": "7z",
+          "label": "7Z 压缩包",
+          "dependency": "py7zr",
+          "note": "重打包内容；不保留全部权限和归档专属元数据。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "tar.gz",
+          "label": "TAR.GZ 压缩包",
+          "dependency": "Python",
+          "note": "先归档再压缩，配套文件结构保留。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "tar.xz",
+          "label": "TAR.XZ 压缩包",
+          "dependency": "Python",
+          "note": "重打包为 XZ 压缩的 TAR，不支持 RAR 输入。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "7z tar gz xz 压缩"
+    },
+    {
+      "id": "json",
+      "label": "JSON 数据",
+      "extension": "JSON",
+      "sample": "records.json",
+      "description": "结构化数据与表格交换，重复键与嵌套结构需要处理。",
+      "routes": [
+        {
+          "target": "yaml",
+          "label": "YAML 数据",
+          "dependency": "PyYAML",
+          "note": "仅转换共同数据模型，重复键拒绝，格式和注释不保留。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "xlsx",
+          "label": "Excel 数据",
+          "dependency": "openpyxl",
+          "note": "输入需为扁平对象数组，嵌套对象需先定义展开规则。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "csv",
+          "label": "CSV 数据",
+          "dependency": "Python",
+          "note": "输入需为扁平对象数组，字段按数据写出。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "yaml yml jsonl 数据"
+    },
+    {
+      "id": "md",
+      "label": "Markdown 笔记",
+      "extension": "MD",
+      "sample": "notes.md",
+      "description": "按内容结构转文档，不把语义转换称为像素级还原。",
+      "routes": [
+        {
+          "target": "docx",
+          "label": "Word 文档",
+          "dependency": "Pandoc",
+          "note": "保留支持的语义结构，不保证复杂排版。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "pdf",
+          "label": "PDF 文档",
+          "dependency": "Pandoc / Word 或 LibreOffice",
+          "note": "先转换 DOCX，再用办公引擎排版导出。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "epub",
+          "label": "EPUB 电子书",
+          "dependency": "Pandoc",
+          "note": "适合流式阅读，外部资源受到沙箱限制。",
+          "flags": "",
+          "status": "ready"
+        },
+        {
+          "target": "html",
+          "label": "HTML 文档",
+          "dependency": "Pandoc",
+          "note": "将内容转成独立 HTML。",
+          "flags": "",
+          "status": "ready"
+        }
+      ],
+      "aliases": "markdown html txt 笔记"
+    }
+  ]
+}
